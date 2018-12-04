@@ -1,3 +1,4 @@
 FROM tensorflow/tensorflow
-ADD minist.py /
+COPY . /home/test
+WORKDIR /home/test
 CMD ["python", "minist.py"]
