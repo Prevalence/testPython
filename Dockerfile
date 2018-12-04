@@ -1,6 +1,3 @@
-FROM python:3.6.7-stretch
-
+FROM tensorflow/tensorflow
 ADD minist.py /
-ADD requirements.txt /
-ADD start.sh /
-CMD ["bash", "start.sh"]
+CMD ["python", "minist.py"]
