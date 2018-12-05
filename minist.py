@@ -2,7 +2,7 @@
 import tensorflow as tf
 # 下载input_data.py源代码,运行然后下载数据集
 from tensorflow.examples.tutorials.mnist import input_data
-#做一下修改.do it again again
+#做一下修改.do it again again again
 mnist = input_data.read_data_sets('MNIST_data/', one_hot=True)
 # 放置占位符
 x = tf.placeholder("float", [None, 784])
