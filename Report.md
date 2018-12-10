@@ -3,6 +3,16 @@
 #### 第二周更新：
 
 尝试搭建了从Github到Jenkins的自动构建的流程。
+
+Dockerfile写的是
+
+```dockerfile
+FROM tensorflow/tensorflow
+COPY . /home/test
+WORKDIR /home/test
+CMD ["python", "minist.py"]
+```
+
 Jenkins里面写的脚本是
 
 ```shell
@@ -11,9 +21,9 @@ docker build . -t test-python:1.0
 docker run test-python:1.0
 ```
 
-这里只是简单测试了一下能否成功运行。
+目前就是走了一遍Push到Github，Jenkins打包镜像，运行容器的过程。
 
-我想的实际的执行过程是
+但我想的实际的执行过程是
 
 1. Github通过WebHook通知Jenkins构建
 2. Jenkins负责
@@ -22,6 +32,32 @@ docker run test-python:1.0
    3. 生成yml文件供Kubernetes部署使用
    4. 在Kubernetes上部署
    5. 获取结果，返回
+
+Jenkins应该要生成一份用于部署到Kubernetes的配置文件，形如`service.yaml`：
+
+```yaml
+apiVersion: apps/v1  #Defines the API Version
+kind: Deployment     #Kinds parameter defines which kind of file is it, over here it is Deployment
+metadata:
+  name: test-python #Stores the name of the deployment
+spec:               # Under Specifications, you mention all the specifications for the deployment
+  replicas: 1       # Number of replicas would be 3
+  selector:
+   matchLabels:
+     app: test-python     #Label name which would be searched is httpd
+  template:
+    metadata:
+    labels:
+      app: test-python   #Template name would be httpd
+  spec:            # Under Specifications, you mention all the specifications for the containers
+   containers:
+   - name: test-python   #Name of the containers would be httpd
+     image: test-python:1.0  #The image which has to be downloaded is httpd:latest
+```
+
+Jenkins中执行的最后一句应该是`kubectl apply -f service.yaml`
+
+
 
 #### 问题
 
