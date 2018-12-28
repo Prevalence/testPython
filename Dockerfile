@@ -1,4 +1,5 @@
-FROM tensorflow/tensorflow
-COPY . /home/test
-WORKDIR /home/test
-CMD ["python", "minist.py"]
+FROM tensorflow/tensorflow:latest-gpu-py3
+
+ADD demo.py /root/k8s/
+
+CMD ["python","/root/k8s/demo.py"]
